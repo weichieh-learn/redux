@@ -7,13 +7,16 @@ const Counter = () => {
   // useSelector: select which data we want from the store
   // (this function will be executed by React-Redux, pass state in and output the part of the state we need)
   // always have the latest counter
-  const counter = useSelector(state => state.counter)
+  const counter = useSelector((state) => state.counter)
 
   const incrementHandler = () => {
-    dispatch({type: 'increment'})
+    dispatch({ type: 'increment' })
+  }
+  const increaseHandler = () => {
+    dispatch({ type: 'increase' , amount: 5})
   }
   const decrementHandler = () => {
-    dispatch({type: 'decrement'})
+    dispatch({ type: 'decrement' })
   }
 
   const toggleCounterHandler = () => {}
@@ -24,6 +27,7 @@ const Counter = () => {
       <div className={classes.value}>{counter}</div>
       <div>
         <button onClick={incrementHandler}>Increment</button>
+        <button onClick={increaseHandler}>Increment by 5</button>
         <button onClick={decrementHandler}>Decrement</button>
       </div>
       <button onClick={toggleCounterHandler}>Toggle Counter</button>
