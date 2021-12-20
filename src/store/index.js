@@ -1,41 +1,36 @@
-import { createStore } from "redux"
+import { createSlice, configureStore } from "@reduxjs/toolkit"
 
 const initialState = {counter: 0, showCounter: true}
 
-const counterReducer = (state = initialState, action) => {
-    // 可以改成switch
-    // reducer 不會自動整合新的state，會直接覆蓋過去，所以要確保return的obj有每個state的值
-    // NEVER do this!!(mutate existing state):
-    // state.counter++; return state; (雖然可以work但很糟，因為obj和array在JS裡是reference values所以可以work，但不要用)
-    // 不要直接改現有的state，而是要return一個新的state obj
-    // 補充: https://academind.com/tutorials/reference-vs-primitive-values
-    if(action.type === 'increment') {
-        return {
-            counter: state.counter + 1,
-            showCounter: state.showCounter
+const counterSlice = createSlice({
+    name: 'counter',
+    initialState, //等同initialState:initialState
+    reducers: {
+        // 不須再寫action.type的if check
+        // 使用了toolkit之後seems可以直接mutate existing state
+        // 是因為toolkit會使用內部的imgur package來偵測code並且自動複製existing state，產生新的state obj，讓所有的state都保存下來
+        increment(state) {
+            state.counter++
+        },
+        
+        decrement(state) {
+            state.counter--
+        },
+        increase(state, action) {
+            state.counter = state.counter + action.payload
+        },
+        toggleCounter(state) {
+            state.showCounter = !state.showCounter
         }
     }
-    if(action.type === 'increase') {
-        return {
-            counter: state.counter + action.amount,
-            showCounter: state.showCounter
-        }
-    }
-    if(action.type === 'decrement') {
-        return {
-            counter: state.counter - 1,
-            showCounter: state.showCounter
-        }
-    }
-    if(action.type === 'toggle') {
-        return {
-            counter: state.counter,
-            showCounter: !state.showCounter
-        }
-    }
-    return state
-}
+})
 
-const store = createStore(counterReducer)
+const store = configureStore({
+    // reducer: { counter: counterSlice.reducer }
+    reducer: counterSlice.reducer 
+})
+
+// counterSlice.actions.toggleCounter() returns an action obj of this shape: { type: 'some auto-generated unique identifier' }
+export const counterActions = counterSlice.actions
 
 export default store
