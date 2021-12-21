@@ -8,8 +8,8 @@ const Counter = () => {
   // useSelector: select which data we want from the store
   // (this function will be executed by React-Redux, pass state in and output the part of the state we need)
   // always have the latest counter
-  const counter = useSelector((state) => state.counter)
-  const show = useSelector((state) => state.showCounter)
+  const counter = useSelector((state) => state.counter.counter)
+  const show = useSelector((state) => state.counter.showCounter)
 
   const incrementHandler = () => {
     dispatch(counterActions.increment())

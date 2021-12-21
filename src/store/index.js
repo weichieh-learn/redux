@@ -1,10 +1,10 @@
 import { createSlice, configureStore } from "@reduxjs/toolkit"
 
-const initialState = {counter: 0, showCounter: true}
+const initialCounterState = {counter: 0, showCounter: true}
 
 const counterSlice = createSlice({
     name: 'counter',
-    initialState, //等同initialState:initialState
+    initialState: initialCounterState, //單寫initialState,等同initialState:initialState
     reducers: {
         // 不須再寫action.type的if check
         // 使用了toolkit之後seems可以直接mutate existing state
@@ -25,12 +25,30 @@ const counterSlice = createSlice({
     }
 })
 
+const initialAuthState = { isAuth: false }
+const authSlice = createSlice({
+    name: 'auth',
+    initialState: initialAuthState,
+    reducers: {
+        login(state) {
+            state.isAuth = true
+        },
+        logout(state) {
+            state.isAuth = false
+        }
+    }
+})
+
 const store = configureStore({
     // reducer: { counter: counterSlice.reducer }
-    reducer: counterSlice.reducer 
+    reducer: {
+        counter: counterSlice.reducer, 
+        auth: authSlice.reducer
+    } 
 })
 
 // counterSlice.actions.toggleCounter() returns an action obj of this shape: { type: 'some auto-generated unique identifier' }
 export const counterActions = counterSlice.actions
+export const authActions = authSlice.actions
 
 export default store
